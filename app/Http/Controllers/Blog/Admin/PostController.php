@@ -140,6 +140,18 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
-        dd(__METHOD__, $id, request()->all());
+        $post = BlogPost::find($id);
+
+        if(empty($post)){
+            return back()
+                ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
+                ->withInput();
+        }else{
+            $post::destroy($id);
+
+            return redirect()
+                ->route('blog.admin.posts.index')
+                ->with(['success' => 'Успешно удален']);
+        }
     }
 }
